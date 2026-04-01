@@ -97,4 +97,52 @@ function moveTouch(e) {
       item.style.overflow = 'hidden'; // 中身がはみ出さないように
     }
 }
+
+// マウス用の処理
+function startMouse(e) {
+  lastX = e.clientX;
+  // マウスを動かしている間と、離した時のイベントを登録
+  window.addEventListener('mousemove', moveMouse);
+  window.addEventListener('mouseup', stopMouse);
+}
+
+function moveMouse(e) {
+  // touchmoveの中身と同じロジックをマウス用に書き換え
+  const rect = document.getElementById('ios-slider-base').getBoundingClientRect();
+  let deltaX = e.clientX - lastX;
+  lastX = e.clientX;
+  
+  let deltaPercent = (deltaX / rect.width) * sensitivity;
+  updateSlider(deltaPercent); // 共通の更新処理へ
+}
+
+function stopMouse() {
+  window.removeEventListener('mousemove', moveMouse);
+  window.removeEventListener('mouseup', stopMouse);
+}
+
+// スマホとマウスで共通の計算処理（これを moveTouch の中身と入れ替えるとスッキリします）
+function updateSlider(deltaP) {
+  currentPercent = Math.min(Math.max(0, currentPercent + deltaP), 1);
+  let cols = Math.ceil(currentPercent * 7) || 1;
+  
+  document.getElementById('ios-fill-horiz').style.width = (currentPercent * 100) + '%';
+  document.getElementById('ios-label-horiz').textContent = `列数: ${cols}`;
+  
+  const container = document.getElementById('container');
+  if (container) {
+    container.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+    container.style.gap = cols > 5 ? '4px' : '10px';
+  }
+}
+
+// 既存の moveTouch も共通処理を使うように書き換えると楽です
+function moveTouch(e) {
+  e.preventDefault();
+  const rect = e.currentTarget.getBoundingClientRect();
+  let deltaX = e.touches[0].clientX - lastX;
+  lastX = e.touches[0].clientX;
+  updateSlider((deltaX / rect.width) * sensitivity);
+}
+
 </script>
