@@ -1,13 +1,4 @@
-<?php
-// あなたのPayPay受取用URL（PayPayアプリで発行したもの）
-$paypay_url = "https://ofuse.me/cb57331f";
-?>
 
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-<meta charset="UTF-8">
-<title>Support the Creator</title>
 <style>
 .support-card {
 border: 2px solid #2882A7; /* カラー */
@@ -18,7 +9,7 @@ max-width: 400px;
 margin: 50px auto;
 font-family: sans-serif;
 }
-.paypay-btn {
+.sien-btn {
 display: inline-block;
 background-color: #2882A7;
 color: #fff;
@@ -28,20 +19,18 @@ border-radius: 30px;
 font-weight: bold;
 transition: 0.3s;
 }
-.paypay-btn:hover {
+.sien-btn:hover {
 opacity: 0.8;
 transform: scale(1.05);
 }
 </style>
-</head>
-<body>
 
 <div class="support-card">
 <h3> </h3>
 <p>＊1円だけでも喜びます！⸜("ˊ▽ˋ")⸝＊</p>
 
 <!-- ボタンを押すと、スマホならPayPayアプリ、PCならQRコードページへ飛びます -->
-<a href="<?php echo $paypay_url; ?>" class="paypay-btn" style="color:#fff;">
+<a href="https://ofuse.me/cb57331f" class="sien-btn" style="color:#fff;">
 創作活動を支援する(OFUSE)
 </a>
 
@@ -49,7 +38,4 @@ transform: scale(1.05);
 ※OFUSEの画面が開きます。
 </p>
 </div>
-
-</body>
-</html>
 
