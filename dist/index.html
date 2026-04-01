@@ -54,63 +54,65 @@ window.site.toggleFilter('all');
 //◇
 
 let lastX = 0;
-let currentPercent = 0.2; // 初期値
+let currentPercent = 0.2; 
 const sensitivity = 7.5;
 const sliderBase = document.getElementById('ios-slider-base');
 
-// 共通の更新処理
+// ★共通の更新処理（ここがズレの原因になりやすいのでシンプルに）
 function updateSlider(deltaX) {
   const rect = sliderBase.getBoundingClientRect();
+  // 横幅に対してどれだけ動いたかの比率を計算
   let deltaPercent = (deltaX / rect.width) * sensitivity;
   currentPercent = Math.min(Math.max(0, currentPercent + deltaPercent), 1);
   
   let cols = Math.ceil(currentPercent * 7) || 1;
   
+  // 見た目の反映
   document.getElementById('ios-fill-horiz').style.width = (currentPercent * 100) + '%';
   document.getElementById('ios-label-horiz').textContent = `列数: ${cols}`;
   
   const container = document.getElementById('container');
   if (container) {
-    container.style.display = 'grid';
     container.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
-    container.style.gap = cols > 5 ? '4px' : '10px';
-    
-    for (let item of container.children) {
-      item.style.aspectRatio = '1 / 1';
-      item.style.overflow = 'hidden';
-    }
   }
 }
 
-// --- タッチ操作 (スマホ) ---
-sliderBase.addEventListener('touchstart', (e) => {
-  lastX = e.touches[0].clientX;
-}, {passive: false});
+// --- 【解決策】マウスとタッチのイベントを一本化 ---
 
-sliderBase.addEventListener('touchmove', (e) => {
-  e.preventDefault(); // スクロール禁止
-  let deltaX = e.touches[0].clientX - lastX;
-  lastX = e.touches[0].clientX;
+// 開始（クリック・タッチ）
+const startAction = (e) => {
+  // マウスならe.clientX、タッチならe.touches[0].clientXを取る
+  lastX = e.touches ? e.touches[0].clientX : e.clientX;
+  
+  // 動かしている最中のイベントを登録
+  window.addEventListener('mousemove', moveAction);
+  window.addEventListener('touchmove', moveAction, { passive: false });
+  // 離した時のイベントを登録
+  window.addEventListener('mouseup', endAction);
+  window.addEventListener('touchend', endAction);
+};
+
+// 移動中
+const moveAction = (e) => {
+  const currentX = e.touches ? e.touches[0].clientX : e.clientX;
+  let deltaX = currentX - lastX;
+  lastX = currentX;
+  
   updateSlider(deltaX);
-}, {passive: false});
+  
+  // スマホで画面がスクロールするのを防ぐ
+  if (e.touches) e.preventDefault();
+};
 
-// --- マウス操作 (PC) ---
-sliderBase.addEventListener('mousedown', (e) => {
-  lastX = e.clientX;
-  
-  const onMouseMove = (me) => {
-    let deltaX = me.clientX - lastX;
-    lastX = me.clientX;
-    updateSlider(deltaX);
-  };
-  
-  const onMouseUp = () => {
-    window.removeEventListener('mousemove', onMouseMove);
-    window.removeEventListener('mouseup', onMouseUp);
-  };
-  
-  window.addEventListener('mousemove', onMouseMove);
-  window.addEventListener('mouseup', onMouseUp);
-});
+// 終了
+const endAction = () => {
+  window.removeEventListener('mousemove', moveAction);
+  window.removeEventListener('touchmove', moveAction);
+};
+
+// 実行（バーに対してイベントを設定）
+sliderBase.addEventListener('mousedown', startAction);
+sliderBase.addEventListener('touchstart', startAction, { passive: false });
+
 
 </script>
