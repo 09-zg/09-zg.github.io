@@ -1,0 +1,56 @@
+<!-- owner.html -->
+<!-- owner.html -->
+<div class="main-section">
+    <h1 class="title-ruby">
+        <ruby>かんりにん<rt>　(管理人)　</rt></ruby> に ついて
+    </h1>
+
+    <div class="profile-layout">
+        <img src="title_icon.png" class="profile-img" alt="">
+        
+        <div class="profile-inner">
+            <div class="txt-lg">ぜぐです！</div>
+            <div class="txt-md">よろしくおねがい</div>
+            <div class="txt-sm">しません。</div>
+            <div class="txt-xs">                <br>
+                <span>媚びるのマジ苦手なんです</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+/* 余計な背景や枠は一切なし */
+
+.title-ruby {
+    font-size: 1.4em;
+    margin-bottom: 1.5em;
+    /*text-align: left;*/
+}
+
+/* 横並びのレイアウト */
+.profile-layout {
+    display: flex;
+    align-items: flex-start; /* 上揃え */
+    gap: 20px; /* 画像と文字の間の余白 */
+}
+
+/* 画像：比率維持・サイズ固定 */
+.profile-img {
+    width: 100px;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    object-fit: contain;
+    flex-shrink: 0; /* 画像が潰れるのを防ぐ */
+}
+
+/* テキスト：サイズ調整のみ */
+.profile-inner {
+    line-height: 1.6;
+}
+
+.txt-lg { font-size: 1.2em; font-weight: bold; }
+.txt-md { font-size: 1.0em; }
+.txt-sm { font-size: 0.7em; color: #fff; } /* 少し薄くして「ボソッ」感を出す */
+.txt-xs { font-size: 0.5em; color: #fff; margin-top: 10px; }
+</style>

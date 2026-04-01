@@ -1,0 +1,100 @@
+<!-- dist/index.html -->
+
+<style>
+/* ルート（index.htmlがある場所）から見たパス */
+@import "dist/css1.css";
+</style>
+
+<div class="main-section">
+
+
+<div class="ios-control-horiz">
+  <div id="ios-slider-base" class="ios-slider-base" 
+       ontouchstart="startTouch(event)" 
+       ontouchmove="moveTouch(event)">
+    <div id="ios-fill-horiz" class="ios-fill-horiz"></div>
+    <div class="ios-icon-horiz">カードサイズ変更バー</div>
+  </div>
+  <div id="ios-label-horiz">列数: 2</div>
+</div>
+
+
+<div class="filter-menu">
+  <!-- 1. フィルターボタン -->
+  <button id="btn-all" class="active" onclick="window.site.toggleFilter('all')">ぜんぶ</button>
+  <button id="btn-utau" onclick="window.site.toggleFilter('utau')">🎤 音源</button>
+  <button id="btn-tool" onclick="window.site.toggleFilter('tool')">⚙️ ツール</button>
+  <button id="btn-novel" onclick="window.site.toggleFilter('novel')">📖 創作</button>
+  <button id="btn-chara" onclick="window.site.toggleFilter('chara')">キャラ</button>
+</div>
+
+<div id="container">読み込み中...</div>
+</div>
+
+<script>
+
+// idx.js は触らず、このページ専用の関数を作る
+function changeColumns(val) {
+  const container = document.getElementById('container');
+  const display = document.getElementById('col-val');
+  
+  if (container) {
+    // 直接スタイルを上書きしちゃう（これが一番確実）
+    container.style.display = 'grid';
+    container.style.gridTemplateColumns = `repeat(${val}, 1fr)`;
+    container.style.gap = val > 5 ? '4px' : '10px'; // 列が多い時は隙間を詰める
+  }
+  if (display) display.textContent = val;
+}
+
+// カード一覧だけを別ファイルから持ってくる
+fetch('dist/list.html')
+.then(r => r.text())
+.then(html => {
+document.getElementById('container').innerHTML = html;
+// 読み込み直後はフィルタをリセットして全部表示させる
+window.site.toggleFilter('all');
+});
+
+//◇
+
+let lastX = 0;
+let currentPercent = 0.2; // 初期値（2列 = 20%）
+const sensitivity = 7.5;  // ★ここを上げると、少しの動きで爆速で増減します
+
+function startTouch(e) {
+  lastX = e.touches[0].clientX;
+}
+
+function moveTouch(e) {
+  e.preventDefault();
+  const rect = e.currentTarget.getBoundingClientRect();
+  const touchX = e.touches[0].clientX;
+  
+  // 前回の位置からの移動量を計算
+  let deltaX = touchX - lastX;
+  lastX = touchX;
+  
+  // 移動量に感度をかけて、現在の％に加算
+  let deltaPercent = (deltaX / rect.width) * sensitivity;
+  currentPercent = Math.min(Math.max(0, currentPercent + deltaPercent), 1);
+   
+  let cols = Math.ceil(currentPercent * 7) || 1;
+  
+  // 見た目と反映
+  document.getElementById('ios-fill-horiz').style.width = (currentPercent * 100) + '%';
+  document.getElementById('ios-label-horiz').textContent = `列数: ${cols}`;
+  
+  const container = document.getElementById('container');
+  if (container) {
+    container.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+    container.style.gap = cols > 5 ? '4px' : '10px';
+  }
+  
+  const items = container.children;
+    for (let item of items) {
+      item.style.aspectRatio = '1 / 1';
+      item.style.overflow = 'hidden'; // 中身がはみ出さないように
+    }
+}
+</script>

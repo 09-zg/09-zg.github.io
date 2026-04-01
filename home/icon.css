@@ -1,0 +1,35 @@
+.content {
+position: relative;
+width: 100%;
+height: 80vh; /* 自由に動かせる広さを確保 */
+}
+
+.menu-item {
+position: absolute;
+/*transition: transform 0.2s ease; *//* 動かした時にヌルッとさせる */
+
+width: 65px; 
+height: auto;
+cursor: pointer;
+padding:15px;
+magin:0;
+}
+
+.menu-item img {
+width: 100%; /* 親（.menu-item）の幅いっぱいに広がる */
+height: auto;
+display: block;
+/* 影をつけると「置いてある感」がアップします */
+/*filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.2));*/
+}
+
+
+/* 個別に位置と角度を指定 */
+#btn-news { transform: translate(150px, -15px) rotate(0deg); }
+#btn-msg{ transform: translate(-30px, 5px) rotate(0deg); }
+#btn-dist { transform: translate(30px, 90px) rotate(0deg); }
+
+
+#btn-news:active img {content: url("news_icon2.png"); }
+#btn-msg:active img {content: url("msg_icon2.png"); }
+#btn-dist:active img {content: url("dist_icon2.png"); }
