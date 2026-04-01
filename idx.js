@@ -26,7 +26,7 @@ window.scrollTo(0, 0);
 const footerLink = document.querySelector('footer .btn');
 const homeIcon = document.getElementById('home-icon');
 
-if (ページ名 === 'owner') {
+if (ページ名 !== 'home') {
 if (footerLink) footerLink.setAttribute('onclick', "window.site.changePage('home', 'home')");
 if (homeIcon) homeIcon.style.display = 'inline';
 } else {
