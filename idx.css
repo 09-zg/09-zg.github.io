@@ -24,6 +24,7 @@ width: 100%;
 height: 100vh; 
 box-sizing: border-box;
 padding-top: 20vh; /* 画面上部から「1割分」だけ空けて開始（お好みで調整） */
+magin-botoom:3em;
 }
 
 .content {
