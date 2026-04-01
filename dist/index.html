@@ -7,16 +7,11 @@
 
 <div class="main-section">
 
-<div class="ios-control-horiz">
-  <div id="ios-slider-base" class="ios-slider-base" 
-       ontouchstart="startTouch(event)" 
-       ontouchmove="moveTouch(event)"
-      onmousedown="startMouse(event)">
-    <div id="ios-fill-horiz" class="ios-fill-horiz"></div>
-    <div class="ios-icon-horiz">カードサイズ変更バー</div>
-  </div>
-  <div id="ios-label-horiz">列数: 2</div>
+<div id="ios-slider-base" class="ios-slider-base">
+  <div id="ios-fill-horiz" class="ios-fill-horiz"></div>
+  <div class="ios-icon-horiz">カードサイズ変更バー</div>
 </div>
+<div id="ios-label-horiz">列数: 2</div>
 
 
 <div class="filter-menu">
@@ -59,90 +54,63 @@ window.site.toggleFilter('all');
 //◇
 
 let lastX = 0;
-let currentPercent = 0.2; // 初期値（2列 = 20%）
-const sensitivity = 7.5;  // ★ここを上げると、少しの動きで爆速で増減します
+let currentPercent = 0.2; // 初期値
+const sensitivity = 7.5;
+const sliderBase = document.getElementById('ios-slider-base');
 
-function startTouch(e) {
-  lastX = e.touches[0].clientX;
-}
-
-function moveTouch(e) {
-  e.preventDefault();
-  const rect = e.currentTarget.getBoundingClientRect();
-  const touchX = e.touches[0].clientX;
-  
-  // 前回の位置からの移動量を計算
-  let deltaX = touchX - lastX;
-  lastX = touchX;
-  
-  // 移動量に感度をかけて、現在の％に加算
+// 共通の更新処理
+function updateSlider(deltaX) {
+  const rect = sliderBase.getBoundingClientRect();
   let deltaPercent = (deltaX / rect.width) * sensitivity;
   currentPercent = Math.min(Math.max(0, currentPercent + deltaPercent), 1);
-   
+  
   let cols = Math.ceil(currentPercent * 7) || 1;
   
-  // 見た目と反映
   document.getElementById('ios-fill-horiz').style.width = (currentPercent * 100) + '%';
   document.getElementById('ios-label-horiz').textContent = `列数: ${cols}`;
   
   const container = document.getElementById('container');
   if (container) {
+    container.style.display = 'grid';
     container.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
     container.style.gap = cols > 5 ? '4px' : '10px';
-  }
-  
-  const items = container.children;
-    for (let item of items) {
+    
+    for (let item of container.children) {
       item.style.aspectRatio = '1 / 1';
-      item.style.overflow = 'hidden'; // 中身がはみ出さないように
+      item.style.overflow = 'hidden';
     }
-}
-
-// マウス用の処理
-function startMouse(e) {
-  lastX = e.clientX;
-  // マウスを動かしている間と、離した時のイベントを登録
-  window.addEventListener('mousemove', moveMouse);
-  window.addEventListener('mouseup', stopMouse);
-}
-
-function moveMouse(e) {
-  // touchmoveの中身と同じロジックをマウス用に書き換え
-  const rect = document.getElementById('ios-slider-base').getBoundingClientRect();
-  let deltaX = e.clientX - lastX;
-  lastX = e.clientX;
-  
-  let deltaPercent = (deltaX / rect.width) * sensitivity;
-  updateSlider(deltaPercent); // 共通の更新処理へ
-}
-
-function stopMouse() {
-  window.removeEventListener('mousemove', moveMouse);
-  window.removeEventListener('mouseup', stopMouse);
-}
-
-// スマホとマウスで共通の計算処理（これを moveTouch の中身と入れ替えるとスッキリします）
-function updateSlider(deltaP) {
-  currentPercent = Math.min(Math.max(0, currentPercent + deltaP), 1);
-  let cols = Math.ceil(currentPercent * 7) || 1;
-  
-  document.getElementById('ios-fill-horiz').style.width = (currentPercent * 100) + '%';
-  document.getElementById('ios-label-horiz').textContent = `列数: ${cols}`;
-  
-  const container = document.getElementById('container');
-  if (container) {
-    container.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
-    container.style.gap = cols > 5 ? '4px' : '10px';
   }
 }
 
-// 既存の moveTouch も共通処理を使うように書き換えると楽です
-function moveTouch(e) {
-  e.preventDefault();
-  const rect = e.currentTarget.getBoundingClientRect();
+// --- タッチ操作 (スマホ) ---
+sliderBase.addEventListener('touchstart', (e) => {
+  lastX = e.touches[0].clientX;
+}, {passive: false});
+
+sliderBase.addEventListener('touchmove', (e) => {
+  e.preventDefault(); // スクロール禁止
   let deltaX = e.touches[0].clientX - lastX;
   lastX = e.touches[0].clientX;
-  updateSlider((deltaX / rect.width) * sensitivity);
-}
+  updateSlider(deltaX);
+}, {passive: false});
+
+// --- マウス操作 (PC) ---
+sliderBase.addEventListener('mousedown', (e) => {
+  lastX = e.clientX;
+  
+  const onMouseMove = (me) => {
+    let deltaX = me.clientX - lastX;
+    lastX = me.clientX;
+    updateSlider(deltaX);
+  };
+  
+  const onMouseUp = () => {
+    window.removeEventListener('mousemove', onMouseMove);
+    window.removeEventListener('mouseup', onMouseUp);
+  };
+  
+  window.addEventListener('mousemove', onMouseMove);
+  window.addEventListener('mouseup', onMouseUp);
+});
 
 </script>
