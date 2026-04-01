@@ -74,6 +74,9 @@ document.getElementById('ios-label-horiz').textContent = `列数: ${cols}`;
 const container = document.getElementById('container');
 if (container) {
 container.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+
+container.style.gap = cols > 4 ? '4px' : '15px'; 
+container.style.width = '100%'; // 親の幅を超えないように固定
 }
 }
 
