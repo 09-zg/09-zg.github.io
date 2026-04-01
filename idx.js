@@ -1,6 +1,9 @@
 (() => {
 const ページを入れ替える = (フォルダ, ページ名, 履歴に保存 = true) => {
-const ファイルパス = フォルダ.includes('.html') ? フォルダ : `${フォルダ}/index.html`;
+// 【ここを追加！】httpから始まる場合はそのまま、それ以外は今までの処理
+const ファイルパス = フォルダ.startsWith('http') 
+? フォルダ 
+: (フォルダ.includes('.html') ? フォルダ : `${フォルダ}/index.html`);
 const 表示エリア = document.getElementById('表示場所');
 if (!表示エリア) return;
 
