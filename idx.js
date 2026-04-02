@@ -1,3 +1,29 @@
+//idx.js
+
+// idx.js の中、最初の「初期読み込み」の部分を少し改造
+(() => {
+// 404から飛ばされてきたかチェック
+const isError = sessionStorage.getItem('error_flag');
+const fromPage = sessionStorage.getItem('error_from');
+
+if (isError === 'true') {
+// チェックが終わったらメモリを掃除（リロードで何度もエラーにならないように）
+sessionStorage.removeItem('error_flag');
+sessionStorage.removeItem('error_from');
+
+// あなたが作ったエラーページ（dist/page/error など）を表示
+// 第2引数の名前を '404' などにするとURLが ?p=404 になります
+window.site.changePage('dist/page/error', '404'); 
+return; // 通常の読み込みをストップ
+}
+
+// --- ここから下は元々の初期読み込み処理（params.get('p')など） ---
+const params = new URLSearchParams(window.location.search);
+const currentP = params.get('p') || 'home';
+window.site.changePage(currentP, currentP, false);
+})();
+
+
 (() => {
 const ページを入れ替える = (フォルダ, ページ名, 履歴に保存 = true) => {
 // 【ここを追加！】httpから始まる場合はそのまま、それ以外は今までの処理
