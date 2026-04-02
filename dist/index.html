@@ -62,7 +62,7 @@ const sliderBase = document.getElementById('ios-slider-base');
 function updateSlider(deltaX) {
 const rect = sliderBase.getBoundingClientRect();
 // 横幅に対してどれだけ動いたかの比率を計算
-let deltaPercent = (deltaX / rect.width) * sensitivity;
+let deltaPercent = (-deltaX / rect.width) * sensitivity;
 currentPercent = Math.min(Math.max(0, currentPercent + deltaPercent), 1);
 
 let cols = Math.ceil(currentPercent * 7) || 1;
