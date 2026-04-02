@@ -1,8 +1,8 @@
+//idx.js
+
 (() => {
-// -----------------------------------------------------------
-// 1. まず「仕組み」を作る（関数を定義する）
-// -----------------------------------------------------------
 const ページを入れ替える = (フォルダ, ページ名, 履歴に保存 = true) => {
+// 【ここを追加！】httpから始まる場合はそのまま、それ以外は今までの処理
 const ファイルパス = フォルダ.startsWith('http') 
 ? フォルダ 
 : (フォルダ.includes('.html') ? フォルダ : `${フォルダ}/index.html`);
@@ -13,8 +13,11 @@ if (!表示エリア) return;
 
 fetch(ファイルパス).then(r => r.text()).then(t => {
 表示エリア.innerHTML = t;
+
+// ページ切り替え時にフィルターをリセット
 activeFilters = []; 
 
+// スクリプトの強制実行
 表示エリア.querySelectorAll('script').forEach(oldScript => {
 const newScript = document.createElement('script');
 newScript.textContent = oldScript.textContent;
@@ -24,6 +27,7 @@ document.body.appendChild(newScript).parentNode.removeChild(newScript);
 表示エリア.style.opacity = 1;
 window.scrollTo(0, 0);
 
+// フッター・アイコンの制御
 const footerLink = document.querySelector('footer .btn');
 const homeIcon = document.getElementById('home-icon');
 
@@ -35,6 +39,7 @@ if (footerLink) footerLink.setAttribute('onclick', "window.site.changePage('owne
 if (homeIcon) homeIcon.style.display = 'none';
 }
 
+// 【重要】URLを ?p=ページ名 に書き換えて保存
 if (履歴に保存) {
 history.pushState({ フォルダ: フォルダ, 名前: ページ名 }, '', `?p=${ページ名}`);
 }
@@ -87,6 +92,7 @@ changePage: ページを入れ替える,
 toggleFilter: フィルター実行 
 };
 
+// 戻るボタン対応
 window.onpopstate = (イベント) => {
 if (イベント.state) {
 ページを入れ替える(イベント.state.フォルダ, イベント.state.名前, false);
@@ -95,24 +101,12 @@ location.reload();
 }
 };
 
-// -----------------------------------------------------------
-// 2. 最後に「実行」する（ここで404チェックも行う）
-// -----------------------------------------------------------
+// 初期読み込み
 const params = new URLSearchParams(window.location.search);
 const currentP = params.get('p') || 'home';
-
-// 404.html からのバトンを受け取る
-const isError = sessionStorage.getItem('error_flag');
-if (isError === 'true') {
-sessionStorage.removeItem('error_flag');
-sessionStorage.removeItem('error_from');
-// エラーページを表示
-ページを入れ替える('assets/404', '404', false);
-} else {
-// 通常通り表示
 ページを入れ替える(currentP, currentP, false);
-}
 
+// スマホ用 active 有効化
 document.addEventListener("touchstart", () => {}, {passive: true});
 
 })();
