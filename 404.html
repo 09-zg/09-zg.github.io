@@ -1,55 +1,19 @@
 <!-- ルート直下の 404.html -->
-
 <!DOCTYPE html>
-<html lang="ja">
+<html>
 <head>
-<meta charset="UTF-8">
-<title>404 Not Found</title>
-<!-- メインのCSSを読み込んで見た目を統一 -->
-<link rel="stylesheet" href="/idx.css">
+    <meta charset="UTF-8">
+    <script>
+        // 1. エラーが起きたことを一応メモリに置く（任意）
+        sessionStorage.setItem('error_flag', 'true');
+
+        // 2. メインサイトの index.html を呼び出す。
+        // その際、パラメータ ?p= に「エラー用ページのパス」を無理やり流し込む！
+        // ※パスの先頭に / を入れないのがコツ（idx.jsの仕様に合わせる）
+        location.replace("/index.html?p=assets/404");
+    </script>
 </head>
 <body>
-<div id="wrapper">
-<!-- 読み込み先となるエリア（id名をメインサイトと合わせる） -->
-<div id="表示場所">読み込み中...</div>
-
-<footer>
-<hr>
-<!-- 戻るためのボタン（ここは普通のリンクでOK） -->
-<a class="btn u-i copyright" href="/index.html">
-<p>&copy;0̴g</p>
-</a>
-</footer>
-</div>
-
-<script>
-// idx.jsと同じ動きをここで再現する
-const 表示エリア = document.getElementById('表示場所');
-
-// 【重要】飛ばしたいファイルへのパス
-const ターゲット = "/assets/404/index.html";
-
-fetch(ターゲット)
-.then(r => {
-if (!r.ok) throw new Error();
-return r.text();
-})
-.then(html => {
-// 中身を入れ替える
-表示エリア.innerHTML = html;
-表示エリア.style.opacity = 1;
-
-// もし読み込んだHTML内にscriptタグがあれば実行する
-表示エリア.querySelectorAll('script').forEach(oldScript => {
-const newScript = document.createElement('script');
-newScript.textContent = oldScript.textContent;
-document.body.appendChild(newScript).parentNode.removeChild(newScript);
-});
-})
-.catch(() => {
-// もしassets/404/index.htmlすら見つからない時の予備
-表示エリア.innerHTML = "<h1>404</h1><p>ページが見つかりません</p>";
-});
-</script>
+    読み込み中...
 </body>
 </html>
