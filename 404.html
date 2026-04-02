@@ -1,6 +1,10 @@
 <!-- ルート直下の 404.html -->
 <script>
-  // URLの末尾（エラーになったページ名）を取得して、メインサイトにパラメータとして渡す
-  const path = window.location.pathname.split('/').pop();
-  location.replace("/index.html?p=error&from=" + "/assets/404");
+  // 「エラーが起きた」という印と、どこから来たかをメモリに保存
+  const path = window.location.pathname.split('/').pop() || '不明なページ';
+  sessionStorage.setItem('error_flag', 'true');
+  sessionStorage.setItem('error_from', path);
+
+  // パラメータを付けずにトップページへ（これで404ループが止まります）
+  location.replace("/");
 </script>
