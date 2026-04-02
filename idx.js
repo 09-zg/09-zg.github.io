@@ -107,7 +107,7 @@ if (isError === 'true') {
 sessionStorage.removeItem('error_flag');
 sessionStorage.removeItem('error_from');
 // エラーページを表示
-ページを入れ替える('dist/page/error', '404', false);
+ページを入れ替える('assets/404', '404', false);
 } else {
 // 通常通り表示
 ページを入れ替える(currentP, currentP, false);
