@@ -21,7 +21,35 @@ return; // 通常の読み込みをストップ
 const params = new URLSearchParams(window.location.search);
 const currentP = params.get('p') || 'home';
 window.site.changePage(currentP, currentP, false);
-})();
+// --- idx.js の一番下の方 ---
+
+// 1. 404から戻ってきたかチェックする「受け取り」の処理
+const エラーチェック = () => {
+    const isError = sessionStorage.getItem('error_flag');
+    if (isError === 'true') {
+        sessionStorage.removeItem('error_flag'); // メモを破棄
+        // ここでエラーページ（dist/page/errorなど）を呼び出す！
+        // 引数はあなたのフォルダ構成に合わせて 'dist/page/error' などに書き換えてください
+        ページを入れ替える('dist/page/error', '404', false);
+        return true; // エラー表示したよ、という合図
+    }
+    return false; // エラーじゃなかったよ
+};
+
+// 2. 実際の初期読み込み処理
+const params = new URLSearchParams(window.location.search);
+const currentP = params.get('p') || 'home';
+
+// エラーチェックをして、エラーじゃなければ普通のページ（homeなど）を出す
+if (!エラーチェック()) {
+    ページを入れ替える(currentP, currentP, false);
+}
+
+// スマホ用 active 有効化
+document.addEventListener("touchstart", () => {}, {passive: true});
+
+})(); // 最後の閉じカッコ
+
 
 
 (() => {
