@@ -40,10 +40,10 @@ display: none !important; /* 強制的に非表示にする */
 }
 
 /* --- カード一覧のレイアウト例 --- */
+/* 親要素のGrid設定も念のため「高さ」を自動に */
 #container {
 display: grid;
-/*grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));*/
-grid-template-columns: repeat(2, 1fr); /* 初期を2列に固定 */
+grid-auto-rows: 1fr; /* 全ての行の高さを揃える */
 gap: 15px;
 }
 
@@ -72,25 +72,28 @@ overflow: hidden; /* はみ出た中身を隠す */
 font-size: clamp(10px, 1.8vw, 18px); 
 }
 
-
-.item {
-padding: 2px;
-border: 1px solid #eee;
-background-color: #000;
-color:#fff;
-text-align: center;
-
-min-width: 0; /* これがないと、中身のサイズまで横に伸びようとします */
-overflow: hidden; /* はみ出しをカット */
-word-break: break-all; /* 長いテキストを強制改行 */
-
-width: 100%;
-min-height: 100%;
-box-sizing: border-box;
-
 font-size: 30cqw;
-}
+.item {
+/* --- 修正箇所：ここをセットで！ --- */
+display: flex;
+align-items: center;
+justify-content: center;
 
+width: 100%; /* 横幅いっぱい */
+aspect-ratio: 1 / 1; /* 正方形を絶対維持 */
+box-sizing: border-box;/* パディングを含めてサイズ計算 */
+padding: 8px;/* 余白を少し控えめに */
+/* -------------------------- */
+
+background-color: #000;
+color: #fff;
+text-align: center;
+overflow: hidden;/* はみ出た文字は隠す（これで形を守る） */
+word-break: break-all;
+
+/* 文字サイズを箱の幅に合わせる魔法の単位 */
+font-size: 20cqw; 
+}
 
 /*◇表示モード*/
 .ios-control-horiz {
