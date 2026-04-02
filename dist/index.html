@@ -1,3 +1,33 @@
+<!-- dist/index.html -->
+
+<style>
+/* ルート（index.htmlがある場所）から見たパス */
+@import "dist/css1.css";
+</style>
+
+<div class="main-section">
+
+<div id="ios-slider-base" class="ios-slider-base">
+<div id="ios-fill-horiz" class="ios-fill-horiz"></div>
+<div class="ios-icon-horiz">カードサイズ変更バー</div>
+</div>
+<div id="ios-label-horiz">列数: 2</div>
+
+
+<div class="filter-menu">
+<!-- 1. フィルターボタン -->
+<button id="btn-all" class="active" onclick="window.site.toggleFilter('all')">ぜんぶ</button>
+<button id="btn-utau" onclick="window.site.toggleFilter('utau')">🎤 音源</button>
+<button id="btn-tool" onclick="window.site.toggleFilter('tool')">⚙️ ツール</button>
+<button id="btn-novel" onclick="window.site.toggleFilter('novel')">📖 創作</button>
+<button id="btn-chara" onclick="window.site.toggleFilter('chara')">キャラ</button>
+</div>
+
+<div id="container">読み込み中...</div>
+</div>
+
+<script>
+
 (() => {
 // --- 設定値 ---
 const config = {
@@ -82,3 +112,5 @@ updateSlider(0); // 初期表示を整える
 });
 
 })();
+
+</script>
