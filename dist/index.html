@@ -1,35 +1,5 @@
-<!-- dist/index.html -->
-
-<style>
-/* ルート（index.htmlがある場所）から見たパス */
-@import "dist/css1.css";
-</style>
-
-<div class="main-section">
-
-<div id="ios-slider-base" class="ios-slider-base">
-<div id="ios-fill-horiz" class="ios-fill-horiz"></div>
-<div class="ios-icon-horiz">カードサイズ変更バー</div>
-</div>
-<div id="ios-label-horiz">列数: 2</div>
-
-
-<div class="filter-menu">
-<!-- 1. フィルターボタン -->
-<button id="btn-all" class="active" onclick="window.site.toggleFilter('all')">ぜんぶ</button>
-<button id="btn-utau" onclick="window.site.toggleFilter('utau')">🎤 音源</button>
-<button id="btn-tool" onclick="window.site.toggleFilter('tool')">⚙️ ツール</button>
-<button id="btn-novel" onclick="window.site.toggleFilter('novel')">📖 創作</button>
-<button id="btn-chara" onclick="window.site.toggleFilter('chara')">キャラ</button>
-</div>
-
-<div id="container">読み込み中...</div>
-</div>
-
-<script>
-
 (() => {
-// --- 設定値（ここを変えると感度や初期値が変わる） ---
+// --- 設定値 ---
 const config = {
 sensitivity: 8.5,
 maxCols: 7,
@@ -44,15 +14,17 @@ const container = document.getElementById('container');
 const label = document.getElementById('ios-label-horiz');
 const fill = document.getElementById('ios-fill-horiz');
 
-// 1. スライダー更新処理（向きを完全逆転）
+// 1. スライダー更新処理（右にスライド ＝ 拡大 ＝ 列数を減らす）
 const updateSlider = (deltaX) => {
 const rect = sliderBase.getBoundingClientRect();
-// 右に動かす(deltaXがプラス)と、%が減るように計算
-let deltaPercent = (-deltaX / rect.width) * config.sensitivity;
+
+// 右に動かすと % が増える
+let deltaPercent = (deltaX / rect.width) * config.sensitivity;
 currentPercent = Math.min(Math.max(0, currentPercent + deltaPercent), 1);
 
-// %が 0 に近いほど 7列、1 に近いほど 1列 になるように逆転計算
-let cols = Math.floor((1 - currentPercent) * config.maxCols) + 1;
+// 【逆転計算】%が大きい(右)ほど列数を少なく(大きく表示)する
+// 1.0(右) = 1列 / 0.0(左) = 7列
+let cols = Math.floor((1 - currentPercent) * (config.maxCols - 1)) + 1;
 cols = Math.min(Math.max(config.minCols, cols), config.maxCols);
 
 // 見た目の反映
@@ -60,36 +32,43 @@ fill.style.width = (currentPercent * 100) + '%';
 label.textContent = `列数: ${cols}`;
 
 if (container) {
-container.style.display = 'grid'; // 強制的にGridにする
+container.style.display = 'grid';
 container.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
 container.style.gap = cols > 4 ? '4px' : '15px';
 container.style.width = '100%';
 }
 };
 
-// 2. イベントハンドラ（一本化）
+// 2. イベントハンドラ（スマホの .clientX 漏れを修正）
+const getX = (e) => {
+// スマホは touches[0] から座標を取る必要があります
+return e.touches ? e.touches[0].clientX : e.clientX;
+};
+
 const moveAction = (e) => {
-const currentX = e.touches ? e.touches[0].clientX : e.clientX;
+const currentX = getX(e);
 let deltaX = currentX - lastX;
 lastX = currentX;
 updateSlider(deltaX);
-if (e.touches) e.preventDefault(); // スマホのスクロール防止
+if (e.touches) e.preventDefault(); // スクロール防止
 };
 
 const endAction = () => {
 window.removeEventListener('mousemove', moveAction);
 window.removeEventListener('touchmove', moveAction);
+window.removeEventListener('mouseup', endAction);
+window.removeEventListener('touchend', endAction);
 };
 
 const startAction = (e) => {
-lastX = e.touches ? e.touches[0].clientX : e.clientX;
+lastX = getX(e);
 window.addEventListener('mousemove', moveAction);
 window.addEventListener('touchmove', moveAction, { passive: false });
 window.addEventListener('mouseup', endAction);
 window.addEventListener('touchend', endAction);
 };
 
-// 3. 実行と初期化
+// 3. 実行
 sliderBase.addEventListener('mousedown', startAction);
 sliderBase.addEventListener('touchstart', startAction, { passive: false });
 
@@ -99,9 +78,7 @@ fetch('dist/list.html')
 .then(html => {
 container.innerHTML = html;
 window.site.toggleFilter('all');
-updateSlider(0); // 読み込み完了時に表示を整える
+updateSlider(0); // 初期表示を整える
 });
 
-})(); // 全体を関数で囲ってカプセル化
-
-</script>
+})();
