@@ -73,7 +73,8 @@ font-size: clamp(10px, 1.8vw, 18px);
 }
 
 .item {
-/* --- 修正箇所：ここをセットで！ --- */
+container-type: inline-size;
+
 display: flex;
 align-items: center;
 justify-content: center;
