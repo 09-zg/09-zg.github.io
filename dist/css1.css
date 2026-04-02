@@ -82,7 +82,7 @@ justify-content: center;
 width: 100%; /* 横幅いっぱい */
 aspect-ratio: 1 / 1; /* 正方形を絶対維持 */
 box-sizing: border-box;/* パディングを含めてサイズ計算 */
-padding: 8px;/* 余白を少し控えめに */
+/*padding: 8px;*//* 余白を少し控えめに */
 /* -------------------------- */
 
 background-color: #000;
