@@ -72,7 +72,6 @@ overflow: hidden; /* はみ出た中身を隠す */
 font-size: clamp(10px, 1.8vw, 18px); 
 }
 
-font-size: 30cqw;
 .item {
 /* --- 修正箇所：ここをセットで！ --- */
 display: flex;
