@@ -1,0 +1,6 @@
+<!-- ルート直下の 404.html -->
+<script>
+  // URLの末尾（エラーになったページ名）を取得して、メインサイトにパラメータとして渡す
+  const path = window.location.pathname.split('/').pop();
+  location.replace("/index.html?p=error&from=" + "/assets/404");
+</script>
