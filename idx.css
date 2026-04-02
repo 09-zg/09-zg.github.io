@@ -84,3 +84,19 @@ user-select: none;
 content: "について";
 }
 
+
+/* 「.dl_btn」がついているボタン全部に適用される */
+.dl_btn {
+    background-color: #ffcc00; /* 目立つ黄色 */
+    font-weight: bold;
+    border-radius: 8px;
+    border: 2px solid #333;
+    text-decoration: none;
+    display: inline-block;
+    padding: 10px 20px;
+}
+
+.dl_btn:hover {
+    background-color: #ffe066;
+}
+
