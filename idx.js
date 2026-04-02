@@ -1,60 +1,8 @@
-//idx.js
-
-// idx.js の中、最初の「初期読み込み」の部分を少し改造
 (() => {
-// 404から飛ばされてきたかチェック
-const isError = sessionStorage.getItem('error_flag');
-const fromPage = sessionStorage.getItem('error_from');
-
-if (isError === 'true') {
-// チェックが終わったらメモリを掃除（リロードで何度もエラーにならないように）
-sessionStorage.removeItem('error_flag');
-sessionStorage.removeItem('error_from');
-
-// あなたが作ったエラーページ（dist/page/error など）を表示
-// 第2引数の名前を '404' などにするとURLが ?p=404 になります
-window.site.changePage('dist/page/error', '404'); 
-return; // 通常の読み込みをストップ
-}
-
-// --- ここから下は元々の初期読み込み処理（params.get('p')など） ---
-const params = new URLSearchParams(window.location.search);
-const currentP = params.get('p') || 'home';
-window.site.changePage(currentP, currentP, false);
-// --- idx.js の一番下の方 ---
-
-// 1. 404から戻ってきたかチェックする「受け取り」の処理
-const エラーチェック = () => {
-    const isError = sessionStorage.getItem('error_flag');
-    if (isError === 'true') {
-        sessionStorage.removeItem('error_flag'); // メモを破棄
-        // ここでエラーページ（dist/page/errorなど）を呼び出す！
-        // 引数はあなたのフォルダ構成に合わせて 'dist/page/error' などに書き換えてください
-        ページを入れ替える('dist/page/error', '404', false);
-        return true; // エラー表示したよ、という合図
-    }
-    return false; // エラーじゃなかったよ
-};
-
-// 2. 実際の初期読み込み処理
-const params = new URLSearchParams(window.location.search);
-const currentP = params.get('p') || 'home';
-
-// エラーチェックをして、エラーじゃなければ普通のページ（homeなど）を出す
-if (!エラーチェック()) {
-    ページを入れ替える(currentP, currentP, false);
-}
-
-// スマホ用 active 有効化
-document.addEventListener("touchstart", () => {}, {passive: true});
-
-})(); // 最後の閉じカッコ
-
-
-
-(() => {
+// -----------------------------------------------------------
+// 1. まず「仕組み」を作る（関数を定義する）
+// -----------------------------------------------------------
 const ページを入れ替える = (フォルダ, ページ名, 履歴に保存 = true) => {
-// 【ここを追加！】httpから始まる場合はそのまま、それ以外は今までの処理
 const ファイルパス = フォルダ.startsWith('http') 
 ? フォルダ 
 : (フォルダ.includes('.html') ? フォルダ : `${フォルダ}/index.html`);
@@ -65,11 +13,8 @@ if (!表示エリア) return;
 
 fetch(ファイルパス).then(r => r.text()).then(t => {
 表示エリア.innerHTML = t;
-
-// ページ切り替え時にフィルターをリセット
 activeFilters = []; 
 
-// スクリプトの強制実行
 表示エリア.querySelectorAll('script').forEach(oldScript => {
 const newScript = document.createElement('script');
 newScript.textContent = oldScript.textContent;
@@ -79,7 +24,6 @@ document.body.appendChild(newScript).parentNode.removeChild(newScript);
 表示エリア.style.opacity = 1;
 window.scrollTo(0, 0);
 
-// フッター・アイコンの制御
 const footerLink = document.querySelector('footer .btn');
 const homeIcon = document.getElementById('home-icon');
 
@@ -91,7 +35,6 @@ if (footerLink) footerLink.setAttribute('onclick', "window.site.changePage('owne
 if (homeIcon) homeIcon.style.display = 'none';
 }
 
-// 【重要】URLを ?p=ページ名 に書き換えて保存
 if (履歴に保存) {
 history.pushState({ フォルダ: フォルダ, 名前: ページ名 }, '', `?p=${ページ名}`);
 }
@@ -144,7 +87,6 @@ changePage: ページを入れ替える,
 toggleFilter: フィルター実行 
 };
 
-// 戻るボタン対応
 window.onpopstate = (イベント) => {
 if (イベント.state) {
 ページを入れ替える(イベント.state.フォルダ, イベント.state.名前, false);
@@ -153,12 +95,24 @@ location.reload();
 }
 };
 
-// 初期読み込み
+// -----------------------------------------------------------
+// 2. 最後に「実行」する（ここで404チェックも行う）
+// -----------------------------------------------------------
 const params = new URLSearchParams(window.location.search);
 const currentP = params.get('p') || 'home';
-ページを入れ替える(currentP, currentP, false);
 
-// スマホ用 active 有効化
+// 404.html からのバトンを受け取る
+const isError = sessionStorage.getItem('error_flag');
+if (isError === 'true') {
+sessionStorage.removeItem('error_flag');
+sessionStorage.removeItem('error_from');
+// エラーページを表示
+ページを入れ替える('dist/page/error', '404', false);
+} else {
+// 通常通り表示
+ページを入れ替える(currentP, currentP, false);
+}
+
 document.addEventListener("touchstart", () => {}, {passive: true});
 
 })();
