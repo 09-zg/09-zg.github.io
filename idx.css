@@ -81,7 +81,7 @@ user-select: none;
 }
 
 .copyright:active::after {
-content: "について";
+    /*content: "について";*/
 }
 
 
