@@ -45,3 +45,5 @@ status.innerText = '（ありがとうございます）';
 }
 };
 })();
+
+window.UtauTracker = UtauTracker;
