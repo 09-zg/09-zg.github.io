@@ -1,23 +1,49 @@
-<!--test/index.html-->
-
 <!-- いいねボタン -->
 <p>
-<div id="like_btn" class="dl_btn" onclick="sendLike()" style="cursor: pointer; display: inline-block;">
+<div id="like_btn" class="dl_btn" onclick="UtauTracker.sendLike()" style="cursor: pointer; display: inline-block;">
 いいね！を送る
 </div>
 <span id="like_status" style="margin-left: 10px; font-size: 0.9em; color: #888;"></span>
 </p>
 
 <script>
-function logCount(type) {
-// あなたのWitchServerのURLに書き換えてください
-const url = 'https://09tool.witchserver.jp/3_data/log.php?type=' + type;
+// UtauTrackerという名前でカプセル化（他のスクリプトと衝突しない）
+const UtauTracker = (function() {
+// 共通のベースURL（ここだけ書き換えればOK）
+const BASE_URL = 'https://09tool.witchserver.jp/3_data/log.php';
 
-// navigator.sendBeaconを使うと、ページ移動中でも確実に送信してくれます（便利！）
+// 内部用の送信関数（プライベート）
+function _send(type) {
+const url = `${BASE_URL}?type=${type}`;
 if (navigator.sendBeacon) {
 navigator.sendBeacon(url);
 } else {
 fetch(url, { mode: 'no-cors' });
 }
 }
+
+// 外部から呼べる関数（パブリック）
+return {
+// DLやReadme用の汎用カウント
+logCount: function(type) {
+_send(type);
+},
+
+// いいねボタン専用（UI操作込み）
+sendLike: function() {
+const btn = document.getElementById('like_btn');
+const status = document.getElementById('like_status');
+
+if (!btn || btn.style.pointerEvents === 'none') return;
+
+_send('like');
+
+// UIの変更（ドライな演出）
+btn.style.pointerEvents = 'none';
+btn.style.opacity = '0.5';
+btn.innerText = 'いいね！送信済み';
+status.innerText = '（ありがとうございます）';
+}
+};
+})();
 </script>
