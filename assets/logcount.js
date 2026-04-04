@@ -1,0 +1,46 @@
+const UtauTracker = (function() {
+const BASE_URL = 'https://09tool.witchserver.jp/3_data/log.php';
+
+// 共通の送信関数（async/awaitで数字を受け取れるようにする）
+async function _send(type) {
+const url = `${BASE_URL}?type=${type}`;
+try {
+// mode: 'cors'（デフォルト）にすることで、PHPのechoを受け取れる
+const response = await fetch(url, { method: 'GET' });
+if (!response.ok) return null;
+return await response.text(); // PHPが出力した数字を返す
+} catch (e) {
+console.error("送信失敗:", e);
+return null;
+}
+}
+
+return {
+// DLボタンなどのカウント（数字を表示しない場合）
+logCount: function(type) {
+_send(type);
+},
+
+// いいねボタン（数字を表示する）
+sendLike: async function() {
+const btn = document.getElementById('like_btn');
+const status = document.getElementById('like_status');
+
+if (!btn || btn.style.pointerEvents === 'none') return;
+
+// ボタンをすぐ無効化して連打防止
+btn.style.pointerEvents = 'none';
+btn.style.opacity = '0.5';
+
+// 送信して結果（カウント数）を待つ
+const count = await _send('like');
+
+btn.innerText = 'いいね！送信済み';
+if (count) {
+status.innerText = `（累計 ${count} 件！ありがとうございます）`;
+} else {
+status.innerText = '（ありがとうございます）';
+}
+}
+};
+})();
