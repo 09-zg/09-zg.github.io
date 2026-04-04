@@ -53,7 +53,7 @@ btn.style.opacity = '0.5';
 const count = await _send('like');
 
 // こう書くと、数字が取れたら「7✨」、ダメでも「✨」だけ表示されます
-btn.innerText = count ? `${count}✨` : '✨';
+btn.innerText = count ? `✨${count}` : '✨';
 
 /*
 btn.innerText = 'いいね！送信済み';
