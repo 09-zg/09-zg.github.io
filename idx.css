@@ -87,42 +87,42 @@ content: "について";
 
 /* 「.dl_btn」がついているボタン全部に適用される */
 .dl_btn {
-    background-color: #ffcc00; /* 目立つ黄色 */
-    font-weight: bold;
-    border-radius: 8px;
-    border: 2px solid #333;
-    text-decoration: none;
-    display: inline-block;
-    padding: 10px 20px;
+background-color: #ffcc00; /* 目立つ黄色 */
+font-weight: bold;
+border-radius: 8px;
+border: 2px solid #333;
+text-decoration: none;
+display: inline-block;
+padding: 10px 20px;
 }
 
 .dl_btn:hover {
-    background-color: #ffe066;
+background-color: #ffe066;
 }/* DLボタン専用のスタイル（class="dl_btn" をつけた場合） */
 .dl_btn {
-    display: inline-block;
-    padding: 10px 24px;
-    background-color: #f0f0f0;    /* 明るい灰色 */
-    color: #444;                 /* 濃い灰色（文字） */
-    text-decoration: none;
-    border: 1px solid #ccc;      /* 控えめな枠線 */
-    border-radius: 4px;
-    font-size: 0.9em;
-    transition: all 0.3s ease;
-    cursor: pointer;
+display: inline-block;
+padding: 10px 24px;
+background-color: #f0f0f0;/* 明るい灰色 */
+color: #444; /* 濃い灰色（文字） */
+text-decoration: none;
+border: 1px solid #ccc;/* 控えめな枠線 */
+border-radius: 4px;
+font-size: 0.9em;
+transition: all 0.3s ease;
+cursor: pointer;
 }
 
 /* マウスを乗せた時（ホバー） */
 .dl_btn:hover {
-    background-color: #e0e0e0;    /* 少しだけ濃い灰色に */
-    border-color: #bbb;
-    color: #222;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05); /* ほんの少し浮く感じ */
+background-color: #e0e0e0;/* 少しだけ濃い灰色に */
+border-color: #bbb;
+color: #222;
+box-shadow: 0 2px 4px rgba(0,0,0,0.05); /* ほんの少し浮く感じ */
 }
 
 /* クリックした瞬間 */
 .dl_btn:active {
-    background-color: #d0d0d0;
-    transform: translateY(1px);    /* 軽く沈む演出 */
+background-color: #d0d0d0;
+transform: translateY(1px);/* 軽く沈む演出 */
 }
 
