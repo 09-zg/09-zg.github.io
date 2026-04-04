@@ -23,15 +23,14 @@ _send(type);
 },
 sendLike: async function(name = 'like', btn) {
 if (!btn || btn.style.pointerEvents === 'none') return;
-// HTMLの data-after に書かれた文字を取得する
-const afterText = btn.getAttribute('data-after') || btn.innerText;
-// HTMLの data-show-count が "false" なら数字を出さない
+// HTMLの data-after から「変化後の姿」を取得（なければ今のまま）
+const afterContent = btn.getAttribute('data-after') || btn.innerHTML;
 const showCount = btn.getAttribute('data-show-count') !== 'false';
 btn.style.pointerEvents = 'none';
 btn.style.opacity = '0.5';
 const count = await _send(name);
-// 文字を入れ替え。数字を出す設定なら後ろに数字をつける
-btn.innerText = (showCount && count) ? `${afterText}${count}` : afterText;
+// 中身をまるごと入れ替えて、数字が必要なら後ろに足すだけ！
+btn.innerHTML = (showCount && count) ? `${afterContent}${count}` : afterContent;
 }
 };
 })();
