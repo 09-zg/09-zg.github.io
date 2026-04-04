@@ -1,6 +1,6 @@
 // assets/logcount.js
 const UtauTracker = (function() {
-const BASE_URL = 'https://witchserver.jp';
+const BASE_URL = 'https://09tool.witchserver.jp/3_data/log.php';
 let isSending = false;
 async function _send(type) {
 if (isSending) return null;
@@ -23,9 +23,9 @@ _send(type);
 },
 sendLike: async function(name = 'like', btn) {
 if (!btn || btn.style.pointerEvents === 'none') return;
-// HTMLの data-after から「変化後の姿」を取得（なければ今のまま）
-const afterContent = btn.getAttribute('data-after') || btn.innerHTML;
-const showCount = btn.getAttribute('data-show-count') !== 'false';
+// HTMLの btn-after から「変化後の姿」を取得（なければ今のまま）
+const afterContent = btn.getAttribute('btn-after') || btn.innerHTML;
+const showCount = btn.getAttribute('btn-hidecount') !== 'false';
 btn.style.pointerEvents = 'none';
 btn.style.opacity = '0.5';
 const count = await _send(name);
