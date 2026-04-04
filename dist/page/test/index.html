@@ -1,30 +1,27 @@
 <!-- いいねボタン -->
 <p>
-<!-- これだけでOK！ -->
-<div id="like_btn" class="dl_btn" onclick="UtauTracker.sendLike()">
-   ✨
+<div id="like_btn" class="dl_btn"
+   onclick="UtauTracker.sendLike('test')">
+✨
 </div>
 </p>
 
 <style>
 #like_btn {
-    display: inline-block;     /* 横幅を中身に合わせる */
-    cursor: pointer;           /* 指マークにする */
-    background-color: #919191;    /* 鉄色 */
-    color: #fff;               /* キラキラの色 */
-    border: 2px solid #6E6E6E;    /* 白い縁取り */
-    border-radius: 8px;        /* 角丸 */
-    padding: 8px 16px;         /* 少しスリムに調整 */
-    transition: 0.2s;          /* 反応を少し速く */
-    user-select: none;         /* 文字選択されないように（連打対策） */
+display: inline-block;
+cursor: pointer;
+background-color: #919191;
+color: #fff;
+border: 2px solid #6E6E6E;
+border-radius: 8px;
+padding: 8px 16px;
+transition: 0.2s;
+user-select: none;
 }
-
 #like_btn:hover {
-    background-color: #666;
+background-color: #666;
 }
-
-/* 押した瞬間に少し凹む演出（これを入れると「ボタン感」が増します） */
 #like_btn:active {
-    transform: scale(0.95);
+transform: scale(0.95);
 }
 </style>
