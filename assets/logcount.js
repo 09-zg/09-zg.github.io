@@ -1,3 +1,4 @@
+//assets/logcount.js
 const UtauTracker = (function() {
 const BASE_URL = 'https://09tool.witchserver.jp/3_data/log.php';
 
