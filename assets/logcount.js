@@ -18,8 +18,8 @@ isSending = false; return null;
 }
 }
 return {
-logCount: function(type) {
-_send(type);
+logCount: async function(type) {
+await _send(type);
 },
 sendLike: async function(name = 'like', btn) {
 if (!btn || btn.style.pointerEvents === 'none') return;
