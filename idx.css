@@ -136,14 +136,14 @@ background-color: #919191;
 color: #fff;
 border: 2px solid #6E6E6E;
 border-radius: 16px;
-padding: 5px 20px;
+padding: 3px 18px;
 transition: 0.2s;
 user-select: none;
 
 box-shadow: 0 4px 0 #464646;
 margin:15px;
 
-font-size:1.7em; 
+font-size:1.5em; 
 }
 .count_btn:hover {
 background-color: #666;
