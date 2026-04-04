@@ -143,7 +143,7 @@ user-select: none;
 box-shadow: 0 4px 0 #464646;
 margin:15px;
 
-font-size: 24px; 
+font-size:1.7em; 
 }
 .count_btn:hover {
 background-color: #666;
