@@ -11,6 +11,7 @@
 <p><a href="
 https://09-zg.github.io/files/tandokuonka/tandokuonka_20260402.zip" 
    class="dl_btn"
+   onclick="logCount('tandoku_dl')"
    download>
    ダウンロードする (.zip)
 </a></p>
@@ -43,3 +44,17 @@ wavファイル群のセットにします｡<br>
 <br>
 　以上<br>
    <br><br>
+
+<script>
+function logCount(type) {
+// あなたのWitchServerのURLに書き換えてください
+const url = 'https://09tool.witchserver.jp/3_data/log.php?type=' + type;
+
+// navigator.sendBeaconを使うと、ページ移動中でも確実に送信してくれます（便利！）
+if (navigator.sendBeacon) {
+navigator.sendBeacon(url);
+} else {
+fetch(url, { mode: 'no-cors' });
+}
+}
+</script>
