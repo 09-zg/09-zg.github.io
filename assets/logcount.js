@@ -7,7 +7,8 @@ if (isSending) return null;
 isSending = true;
 const url = `${BASE_URL}?type=${encodeURIComponent(type)}`;
 try {
-const response = await fetch(url, { method: 'GET' });
+// keepalive: true を追加して、ページ移動時の中断を防ぎます
+const response = await fetch(url, { method: 'GET', keepalive: true });
 if (!response.ok) { isSending = false; return null; }
 const text = await response.text();
 setTimeout(() => { isSending = false; }, 500);
@@ -24,12 +25,10 @@ await _send(type);
 sendLike: async function(name = 'like', btn) {
 if (!btn || btn.style.pointerEvents === 'none') return;
 const afterContent = btn.getAttribute('btn-after') || btn.innerHTML;
-// 「true」と書いてあったら数字を表示しない（hideCountを真にする）
 const hideCount = btn.getAttribute('btn-hidecount') === 'true';
 btn.style.pointerEvents = 'none';
 btn.style.opacity = '0.5';
 const count = await _send(name);
-// hideCountがtrueなら数字を出さない、そうでなければ数字を出す
 btn.innerHTML = (hideCount || !count) ? afterContent : `${afterContent}${count}`;
 }
 };
