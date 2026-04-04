@@ -2,7 +2,7 @@
 
 <div class="main-section">
 <p>
-<div class="dl_btn"
+<div class="count_btn"
    onclick="UtauTracker.sendLike('test_btn', this)"
    btn-after="💖">
 ✨
@@ -10,7 +10,7 @@
 </p>
 
 <p>
-<div class="dl_btn"
+<div class="count_btn"
    onclick="UtauTracker.sendLike('test2_btn', this)"
    btn-after="✨" btn-hidecount="true">
 🎉️
@@ -19,7 +19,7 @@
 </div>
 
 <style>
-#like_btn {
+.count_btn {
 display: inline-block;
 cursor: pointer;
 background-color: #919191;
@@ -30,10 +30,10 @@ padding: 8px 16px;
 transition: 0.2s;
 user-select: none;
 }
-#like_btn:hover {
+.count_btn:hover {
 background-color: #666;
 }
-#like_btn:active {
+.count_btn:active {
 transform: scale(0.95);
 }
 </style>
