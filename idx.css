@@ -140,7 +140,7 @@ padding: 8px 16px;
 transition: 0.2s;
 user-select: none;
 
-box-shadow: 0 4px 0 #6E6E6E;
+box-shadow: 0 4px 0 #464646;
 margin:15px;
 }
 .count_btn:hover {
@@ -148,7 +148,7 @@ background-color: #666;
 }
 .count_btn:active {
 /*transform: scale(0.95);*/
-box-shadow: 0 1px 0 #6E6E6E; /* 影を薄くする */
+box-shadow: 0 1px 0 #464646; /* 影を薄くする */
 transform: translateY(3px);   /* 影の分だけ下にずらす */
 }
 }
